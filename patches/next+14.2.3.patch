@@ -1,0 +1,39 @@
+diff --git a/node_modules/next/dist/esm/server/lib/incremental-cache/index.js b/node_modules/next/dist/esm/server/lib/incremental-cache/index.js
+index ddf8f34..3618699 100644
+--- a/node_modules/next/dist/esm/server/lib/incremental-cache/index.js
++++ b/node_modules/next/dist/esm/server/lib/incremental-cache/index.js
+@@ -356,12 +356,13 @@ export class IncrementalCache {
+         }
+         if (this.disableForTestmode || this.dev && !ctx.fetchCache) return;
+         // FetchCache has upper limit of 2MB per-entry currently
++        const max_fetch_size = Number(process.env.MAX_FETCH_SIZE)
+         const itemSize = JSON.stringify(data).length;
+         if (ctx.fetchCache && // we don't show this error/warning when a custom cache handler is being used
+         // as it might not have this limit
+-        !this.hasCustomCacheHandler && itemSize > 2 * 1024 * 1024) {
++        !this.hasCustomCacheHandler && itemSize > max_fetch_size * 1024 * 1024) {
+             if (this.dev) {
+-                throw new Error(`Failed to set Next.js data cache, items over 2MB can not be cached (${itemSize} bytes)`);
++                throw new Error(`Failed to set Next.js data cache, items over ${max_fetch_size}MB can not be cached (${itemSize} bytes)`);
+             }
+             return;
+         }
+diff --git a/node_modules/next/dist/server/lib/incremental-cache/index.js b/node_modules/next/dist/server/lib/incremental-cache/index.js
+index 7993a33..ea757e8 100644
+--- a/node_modules/next/dist/server/lib/incremental-cache/index.js
++++ b/node_modules/next/dist/server/lib/incremental-cache/index.js
+@@ -384,11 +384,12 @@ class IncrementalCache {
+         if (this.disableForTestmode || this.dev && !ctx.fetchCache) return;
+         // FetchCache has upper limit of 2MB per-entry currently
+         const itemSize = JSON.stringify(data).length;
++        const max_fetch_size = Number(process.env.MAX_FETCH_SIZE)
+         if (ctx.fetchCache && // we don't show this error/warning when a custom cache handler is being used
+         // as it might not have this limit
+-        !this.hasCustomCacheHandler && itemSize > 2 * 1024 * 1024) {
++        !this.hasCustomCacheHandler && itemSize > max_fetch_size * 1024 * 1024) {
+             if (this.dev) {
+-                throw new Error(`Failed to set Next.js data cache, items over 2MB can not be cached (${itemSize} bytes)`);
++                throw new Error(`Failed to set Next.js data cache, items over ${max_fetch_size}MB can not be cached (${itemSize} bytes)`);
+             }
+             return;
+         }

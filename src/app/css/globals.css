@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-[#f5f5f5];
+  }
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+* {
+  color: #000;
+}
+
+body {
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+  font-size: 1.25rem;
+  border: 0;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+.circle {
+  clip-path: circle();
+}
+
+
