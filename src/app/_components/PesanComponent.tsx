@@ -19,6 +19,7 @@ export default function PesanComponent() {
             className="text-2xl mt-8 text-nowrap bg-dgreen border-dgreen border-[2px] rounded active:shadow-lg hover:bg-[#f5f5f5] hover:text-dgreen hover:border-[2px] hover:border-dgreen hover:cursor-pointer text-white transition-all lg:mt-12 py-2 w-36 mx-auto">
                 <a href="https://wa.me/6281385976170" target="_blank" rel="noopener noreferrer" title="WhatsApp">Pesan</a>
             </div>
+            
         </div>
     )
 }

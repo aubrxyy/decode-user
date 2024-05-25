@@ -1,3 +1,4 @@
+import Image from "next/image";
 
 interface LogoProps {
     className?: string;
@@ -6,7 +7,7 @@ interface LogoProps {
 export default function Logo (props: LogoProps) {
     return (
         <a href="/" >
-            <img src='/logo.png' alt="Warung Sate Beber" width={280} className={props.className} />
+            <Image src='/logo.png' alt="Warung Sate Beber" width={280} height={100} className={props.className} />
         </a>
     )
 }

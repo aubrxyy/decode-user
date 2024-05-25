@@ -1,26 +1,23 @@
 import { Caladea } from "next/font/google";
+import Image from "next/image";
 
 export const caladea = Caladea({
     weight: "700",
     subsets: ["latin"]
 })
 
-interface categoryLink {
-    categoryLink?: string;
-}
-
 interface Category {
+    imageUrl: string ;
     title: string;
-    imageData: string;
 }
 
 async function getCategory() {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`, { cache: 'force-cache' });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`, { cache: "no-store" });
 
     return res.json();
 }
 
-export default async function KategoriComponent({categoryLink = "/menu"}: categoryLink ) {
+export default async function KategoriComponent() {
     const categories = await getCategory();
 
     return (
@@ -30,8 +27,8 @@ export default async function KategoriComponent({categoryLink = "/menu"}: catego
                 <div className="flex gap-8 mx-auto flex-row flex-wrap items-center justify-center text-center">
                     {categories.map((category: Category, index: number) => (
                         <div key={index}>
-                            <a href={categoryLink}>
-                                <img src={`data:image/jpeg;base64,${category.imageData}`} alt={category.title} loading="lazy" className="size-[175px] max-lg:size-[125px] rounded-full object-cover cursor-pointer" />
+                            <a href={`#${category.title}`}>
+                                <img src={category.imageUrl} alt={category.title} loading="lazy" className="size-[175px] max-lg:size-[125px] rounded-full object-cover cursor-pointer" />
                                 <p className="mt-4 text-xl cursor-pointer">{category.title}</p>
                             </a>
                         </div>

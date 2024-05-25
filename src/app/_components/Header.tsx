@@ -84,11 +84,14 @@ export default function Header(props: HeaderProps) {
           </div>
           <DisclosurePanel className="xl:hidden">
             <div className="space-y-1 px-2 pb-3 pt-2">
-              {navigation.map((item) => (
-                <Link key={item.name} href={item.href} className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">
-                  {item.name}
-                </Link>
-              ))}
+              {navigation.map((item) => {
+                const isActive = pathname.endsWith(item.href);
+                return (
+                  <Link key={item.name} href={item.href} className={`${isActive ? "bg-dgreen text-white rounded-lg border-green-900" : "text-gray-500 border-green-800 hover:text-black lg:border-0 lg:hover:border-b-2 max-lg:active:text-black text-nowrap"} text-2xl block px-3 py-2 mx-3 transition-all lg:p-0`}>
+                    {item.name}
+                  </Link>
+                );
+              })}
             </div>
           </DisclosurePanel>
           {props.children}

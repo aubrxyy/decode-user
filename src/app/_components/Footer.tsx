@@ -21,12 +21,14 @@ export default function Footer() {
                 <h3 className="font-bold text-center text-3xl mb-2">
                     Contact
                 </h3>
-                <div className="flex flex-row items-center justify-center">
-                    <img src="/logoWA.png" alt="WA" className="size-12"/>
-                    <p className="text-2xl text-center">
-                        081385976170
-                    </p>
-                </div>
+                <a href="https://wa.me/6281385976170" target="_blank" rel="noopener noreferrer">
+                    <div className="flex flex-row items-center justify-center">
+                        <img src="/logoWA.png" alt="WA" className="size-12"/>
+                        <p className="text-2xl text-center">
+                            081385976170
+                        </p>
+                    </div>
+                </a>
             </div>
         </div>
         <div className="bottom-0 right-0 flex justify-end">
