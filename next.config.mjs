@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     env: {
-        NEXT_PUBLIC_API_URL: 'http://localhost:8080/api',
-        MAX_FETCH_SIZE: '100'
+        NEXT_PUBLIC_API_URL: 'https://admin-sate-beber.azurewebsites.net/api/categories',
+        MAX_FETCH_SIZE: '2'
     }
 };
 

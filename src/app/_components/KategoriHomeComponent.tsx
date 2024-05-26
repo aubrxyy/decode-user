@@ -1,5 +1,4 @@
 import { Caladea } from "next/font/google";
-import Image from "next/image";
 
 export const caladea = Caladea({
     weight: "700",
@@ -12,9 +11,14 @@ interface Category {
 }
 
 async function getCategory() {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`, { cache: "no-store" });
-
-    return res.json();
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}`, { cache: "no-store" });
+        if (!res.ok) throw new Error('Network response was not ok');
+        return res.json();
+    } catch (error) {
+        console.error('Failed to fetch categories:', error);
+        return [];
+    }
 }
 
 export default async function KategoriComponent() {

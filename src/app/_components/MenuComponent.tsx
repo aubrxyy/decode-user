@@ -1,5 +1,5 @@
 import { Caladea } from "next/font/google"
-import Image from "next/image";
+import AddToCartBtn from './AddToCartBtn';
 
 export const caladea = Caladea({
     weight: "700",
@@ -7,9 +7,14 @@ export const caladea = Caladea({
 })
 
 async function getCategory() {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`, { cache: "no-store" });
-
-    return res.json();
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}`, { cache: "no-store" });
+        if (!res.ok) throw new Error('Network response was not ok');
+        return res.json();
+    } catch (error) {
+        console.error('Failed to fetch categories:', error);
+        return [];
+    }
 }
 
 interface Category {
@@ -18,7 +23,7 @@ interface Category {
     menus: Menu[];
 }
 
-interface Menu {
+export interface Menu {
     title: string;
     imageUrl: string;
     description: string;
@@ -42,8 +47,12 @@ export default async function MenuComponent() {
                                         <h3 className="lg:text-2xl/none text-xl/none mt-2">{menu.title}</h3>
                                         <span className="text-lg/none text-gray-500">{menu.description}</span>
                                     </div>
-                                    <p className="text-lg text-[#674242] mt-1">Rp. {menu.price}</p>
+                                    <div className="flex flex-col">
+                                        <p className="text-lg text-[#674242] flex justify-end mt-1">Rp. {menu.price}</p>
+                                        <AddToCartBtn menu={menu} />
+                                    </div>
                                 </div>
+                                
                             </div>
                         ))}
                     </div>
@@ -52,3 +61,5 @@ export default async function MenuComponent() {
         </>
     )
 }
+
+

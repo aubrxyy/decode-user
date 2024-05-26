@@ -1,19 +1,21 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
-import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/react";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import Logo from "./Logo";
-import Link from "next/link";
-import "../css/globals.css";
-import { usePathname } from "next/navigation";
+import { useState, useEffect } from "react"
+import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/react"
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
+import Logo from "./Logo"
+import Link from "next/link"
+import "../css/globals.css"
+import { usePathname } from "next/navigation"
+import Image from "next/image"
 
 const navigation = [
   { name: "home", href: "/" },
   { name: "menu", href: "/menu" },
   { name: "lokasi", href: "/lokasi" },
-  { name: "tentang kami", href: "/about" }, 
+  { name: "tentang kami", href: "/about" },
   { name: "kontak", href: "/kontak" },
+  { name: "cart", href: "/cart" },
 ];
 
 interface HeaderProps {
@@ -27,9 +29,9 @@ export default function Header(props: HeaderProps) {
 
   const controlHeader = () => {
     if (typeof window !== 'undefined') {
-      if (window.scrollY > lastScrollY) { // if scroll down hide the header
+      if (window.scrollY > lastScrollY) {
         setShowHeader(false);
-      } else { // if scroll up show the header
+      } else {
         setShowHeader(true);
       }
       setLastScrollY(window.scrollY);
@@ -71,8 +73,21 @@ export default function Header(props: HeaderProps) {
                   <div className="flex space-x-16">
                     {navigation.map((item) => {
                       const isActive = pathname.endsWith(item.href);
+                      if (item.name === "cart") {
+                        return (
+                          <Link key={item.name} href={item.href} className="relative flex items-center">
+                            <div className="flex items-center justify-center w-16 h-8 bg-dgreen rounded-full">
+                              <Image src="/cart.svg" alt="cart" width={24} height={24} />
+                            </div>
+                          </Link>
+                        );
+                      }
                       return (
-                        <Link key={item.name} href={item.href} className={`${isActive ? "text-gray-900 border-b-2 border-green-900" : "text-gray-500 border-green-800 hover:text-black lg:border-0 lg:hover:border-b-2 max-lg:active:text-black text-nowrap"} text-2xl block px-3 py-2 mx-3 transition-all lg:p-0`}>
+                        <Link
+                          key={item.name}
+                          href={item.href}
+                          className={`${isActive ? "text-gray-900 border-b-2 border-green-900" : "text-gray-500 border-green-800 hover:text-black lg:border-0 lg:hover:border-b-2 max-lg:active:text-black text-nowrap"} text-2xl block px-3 py-2 mx-3 transition-all lg:p-0`}
+                        >
                           {item.name}
                         </Link>
                       );
@@ -82,19 +97,25 @@ export default function Header(props: HeaderProps) {
               </div>
             </div>
           </div>
+
           <DisclosurePanel className="xl:hidden">
-            <div className="space-y-1 px-2 pb-3 pt-2">
-              {navigation.map((item) => {
-                const isActive = pathname.endsWith(item.href);
-                return (
-                  <Link key={item.name} href={item.href} className={`${isActive ? "bg-dgreen text-white rounded-lg border-green-900" : "text-gray-500 border-green-800 hover:text-black lg:border-0 lg:hover:border-b-2 max-lg:active:text-black text-nowrap"} text-2xl block px-3 py-2 mx-3 transition-all lg:p-0`}>
-                    {item.name}
-                  </Link>
-                );
-              })}
+            <div className="space-y-1 px-2 pt-2 pb-3 sm:px-3">
+              {navigation.map((item) => (
+                <DisclosureButton
+                  key={item.name}
+                  as={Link}
+                  href={item.href}
+                  className={`${
+                    pathname.endsWith(item.href)
+                      ? "bg-dgreen text-white rounded-lg border-green-900"
+                      : "text-gray-500 border-green-800 hover:text-black lg:border-0 max-lg:active:text-black text-nowrap"
+                  } text-2xl block px-3 py-2 mx-3 transition-all lg:p-1`}
+                >
+                  {item.name}
+                </DisclosureButton>
+              ))}
             </div>
           </DisclosurePanel>
-          {props.children}
         </>
       )}
     </Disclosure>
