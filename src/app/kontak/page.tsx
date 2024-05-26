@@ -2,7 +2,7 @@ import KontakComponent from '../_components/KontakComponent';
 import { Calistoga } from 'next/font/google';
 import Link from 'next/link';
 
-export const calistoga = Calistoga({
+const calistoga = Calistoga({
     weight: '400',
     subsets: ['latin'],
 });
