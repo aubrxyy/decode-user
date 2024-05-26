@@ -1,7 +1,7 @@
 import { Caladea } from "next/font/google"
 import AddToCartBtn from './AddToCartBtn';
 
-export const caladea = Caladea({
+const caladea = Caladea({
     weight: "700",
     subsets: ["latin"]
 })
@@ -37,8 +37,9 @@ export default async function MenuComponent() {
         <>
             {categories.map((category: Category, index: number) => (
                 <div key={index} id={category.title} className="my-20 w-3/4 mx-auto">
-                    <div className={caladea.className}><h2 className="ml-2 lg:ml-6 text-4xl">{category.title}</h2></div>
-                    <div className="flex flex-wrap justify-center 2xl:justify-start my-8 gap-8">
+                    <div className={caladea.className}><h2 className="text-4xl">{category.title}</h2></div>
+                    <div className='mt-4 w-[5ch] h-[2px] bg-gray-400'></div>
+                    <div className="flex flex-wrap justify-center 2xl:justify-start my-6 gap-8">
                         {category.menus.map((menu: Menu, index: number) => (
                             <div key={index}>
                                 <img src={menu.imageUrl} alt={menu.title} className="w-[410px] h-[270px] rounded-lg object-cover "/>

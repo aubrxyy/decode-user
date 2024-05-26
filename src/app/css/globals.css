@@ -31,3 +31,17 @@ body {
 }
 
 
+#popup {
+    transition: opacity 0.5s ease-in-out;
+}
+
+#popup.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+#popup.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
