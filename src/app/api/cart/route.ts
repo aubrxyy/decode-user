@@ -15,6 +15,7 @@ const redis = new Redis({
 });
 
 export async function POST(req: NextRequest) {
+    const start = Date.now();
     try {
         const { title, description, price, imageUrl, quantity } = await req.json();
         const cart: CartItem[] = await redis.get('cart') || [];
@@ -29,22 +30,28 @@ export async function POST(req: NextRequest) {
 
         await redis.set('cart', cart);
 
+        console.log(`POST execution time: ${Date.now() - start}ms`);
         return NextResponse.json(cart);
     } catch (error: any) {
+        console.log(`POST execution time (error): ${Date.now() - start}ms`);
         return NextResponse.json({ success: false, error: error.message });
     }
 }
 
 export async function GET() {
+    const start = Date.now();
     try {
         const cart: CartItem[] = await redis.get('cart') || [];
+        console.log(`GET execution time: ${Date.now() - start}ms`);
         return NextResponse.json(cart);
     } catch (error: any) {
+        console.log(`GET execution time (error): ${Date.now() - start}ms`);
         return NextResponse.json({ success: false, error: error.message });
     }
 }
 
 export async function PUT(req: NextRequest) {
+    const start = Date.now();
     try {
         const { title, quantity } = await req.json();
         const cart: CartItem[] = await redis.get('cart') || [];
@@ -57,8 +64,10 @@ export async function PUT(req: NextRequest) {
 
         await redis.set('cart', cart);
 
+        console.log(`PUT execution time: ${Date.now() - start}ms`);
         return NextResponse.json(cart);
     } catch (error: any) {
+        console.log(`PUT execution time (error): ${Date.now() - start}ms`);
         return NextResponse.json({ success: false, error: error.message });
     }
 }
