@@ -9,6 +9,8 @@ interface CartItem {
     quantity: number;
 }
 
+let cart: CartItem[] = [];
+
 const redis = new Redis({
     url: process.env.UPSTASH_REDIS_URL,
     token: process.env.UPSTASH_REDIS_TOKEN,
