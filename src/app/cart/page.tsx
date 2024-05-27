@@ -17,7 +17,7 @@ export default function CartPage() {
         async function fetchCart() {
             const res = await fetch('/api/cart');
             const data = await res.json();
-            const filteredData = data.filter((item: CartItem) => item.quantity > 0); // Filter out items with quantity 0
+            const filteredData = data.filter((item: CartItem) => item.quantity > 0); 
             setCart(filteredData);
         }
 
