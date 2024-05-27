@@ -9,48 +9,58 @@ interface CartItem {
     quantity: number;
 }
 
-let cart: CartItem[] = [];
-
 const redis = new Redis({
     url: process.env.UPSTASH_REDIS_URL,
     token: process.env.UPSTASH_REDIS_TOKEN,
 });
 
 export async function POST(req: NextRequest) {
-    const { title, description, price, imageUrl, quantity } = await req.json();
-    const cart: CartItem[] = await redis.get('cart') || [];
+    try {
+        const { title, description, price, imageUrl, quantity } = await req.json();
+        const cart: CartItem[] = await redis.get('cart') || [];
 
-    const existingItem = cart.find(item => item.title === title);
+        const existingItem = cart.find(item => item.title === title);
 
-    if (existingItem) {
-        existingItem.quantity += quantity;
-    } else {
-        cart.push({ title, description, price, imageUrl, quantity });
+        if (existingItem) {
+            existingItem.quantity += quantity;
+        } else {
+            cart.push({ title, description, price, imageUrl, quantity });
+        }
+
+        await redis.set('cart', cart);
+
+        return NextResponse.json(cart);
+    } catch (error: any) {
+        return NextResponse.json({ success: false, error: error.message });
     }
-
-    await redis.set('cart', cart);
-
-    return NextResponse.json(cart);
 }
 
 export async function GET() {
-    const cart: CartItem[] = await redis.get('cart') || [];
-    return NextResponse.json(cart);
+    try {
+        const cart: CartItem[] = await redis.get('cart') || [];
+        return NextResponse.json(cart);
+    } catch (error: any) {
+        return NextResponse.json({ success: false, error: error.message });
+    }
 }
 
 export async function PUT(req: NextRequest) {
-    const { title, quantity } = await req.json();
-    const cart: CartItem[] = await redis.get('cart') || [];
+    try {
+        const { title, quantity } = await req.json();
+        const cart: CartItem[] = await redis.get('cart') || [];
 
-    const item = cart.find(item => item.title === title);
+        const item = cart.find(item => item.title === title);
 
-    if (item) {
-        item.quantity = quantity;
+        if (item) {
+            item.quantity = quantity;
+        }
+
+        await redis.set('cart', cart);
+
+        return NextResponse.json(cart);
+    } catch (error: any) {
+        return NextResponse.json({ success: false, error: error.message });
     }
-
-    await redis.set('cart', cart);
-
-    return NextResponse.json(cart);
 }
 
 export function OPTIONS() {
