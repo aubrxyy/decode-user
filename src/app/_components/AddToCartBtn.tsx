@@ -2,12 +2,14 @@
 
 import { Menu } from './MenuComponent';
 import Image from 'next/image';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import '../css/globals.css';
 
 interface AddToCartBtnProps {
     menu: Menu;
 }
+
+let activePopups = 0;
 
 async function addToCart(menu: Menu) {
     const priceValue = parseInt(menu.price.replace(/\./g, ''));
@@ -26,6 +28,7 @@ export default function AddToCartBtn({ menu }: AddToCartBtnProps) {
     const clickCount = useRef(0);
     const timeoutId = useRef<NodeJS.Timeout | null>(null);
     const popupId = `popup-${menu.title.replace(/\s+/g, '-')}`;
+    const [popupPosition, setPopupPosition] = useState(0);
 
     const handleClick = async () => {
         await addToCart(menu);
@@ -52,6 +55,7 @@ export default function AddToCartBtn({ menu }: AddToCartBtnProps) {
                 popup.classList.remove('visible');
                 popup.classList.add('hidden');
                 clickCount.current = 0;
+                activePopups -= 1;
             }, 1250); 
         }
     };
@@ -59,8 +63,11 @@ export default function AddToCartBtn({ menu }: AddToCartBtnProps) {
     useEffect(() => {
         const popup = document.createElement('div');
         popup.id = popupId;
-        popup.className = 'hidden fixed bottom-4 left-4 bg-dgreen text-white p-3 rounded shadow-lg';
+        popup.className = 'hidden fixed left-4 bg-dgreen text-white p-3 rounded shadow-lg';
+        popup.style.bottom = `${4 + activePopups * 60}px`;
         document.body.appendChild(popup);
+        setPopupPosition(activePopups);
+        activePopups += 1;
 
         return () => {
             if (popup) {
@@ -69,6 +76,7 @@ export default function AddToCartBtn({ menu }: AddToCartBtnProps) {
             if (timeoutId.current) {
                 clearTimeout(timeoutId.current);
             }
+            activePopups -= 1;
         };
     }, [popupId]);
 
