@@ -39,7 +39,7 @@ export default async function MenuComponent() {
                 <div key={index} id={category.title} className="my-20 w-3/4 mx-auto">
                     <div className={caladea.className}><h2 className="text-4xl">{category.title}</h2></div>
                     <div className='mt-4 w-[5ch] h-[2px] bg-gray-400'></div>
-                    <div className="flex flex-wrap justify-center 2xl:justify-start my-6 gap-6">
+                    <div className="flex flex-wrap justify-center 2xl:justify-center my-6 gap-7">
                         {category.menus.map((menu: Menu, index: number) => (
                             <div key={index}>
                                 <img src={menu.imageUrl} alt={menu.title} className="w-[410px] h-[270px] rounded-lg object-cover "/>
