@@ -25,6 +25,7 @@ async function addToCart(menu: Menu) {
 export default function AddToCartBtn({ menu }: AddToCartBtnProps) {
     const clickCount = useRef(0);
     const timeoutId = useRef<NodeJS.Timeout | null>(null);
+    const popupId = `popup-${menu.title.replace(/\s+/g, '-')}`;
 
     const handleClick = async () => {
         await addToCart(menu);
@@ -33,7 +34,7 @@ export default function AddToCartBtn({ menu }: AddToCartBtnProps) {
 
     const showPopup = () => {
         clickCount.current += 1;
-        const popup = document.getElementById('popup');
+        const popup = document.getElementById(popupId);
         if (popup) {
             if (clickCount.current > 1) {
                 popup.innerText = `✓ Item added to cart! (${clickCount.current})`;
@@ -56,13 +57,11 @@ export default function AddToCartBtn({ menu }: AddToCartBtnProps) {
     };
 
     useEffect(() => {
-        // Create the popup element
         const popup = document.createElement('div');
-        popup.id = 'popup';
+        popup.id = popupId;
         popup.className = 'hidden fixed bottom-4 left-4 bg-dgreen text-white p-3 rounded shadow-lg';
         document.body.appendChild(popup);
 
-        // Cleanup on unmount
         return () => {
             if (popup) {
                 document.body.removeChild(popup);
@@ -71,7 +70,7 @@ export default function AddToCartBtn({ menu }: AddToCartBtnProps) {
                 clearTimeout(timeoutId.current);
             }
         };
-    }, []);
+    }, [popupId]);
 
     return (
         <button onClick={handleClick} className="flex items-center justify-center bg-dgreen hover:scale-110 active:scale-95 transition-all active:bg-[#aacc81] active:ring-2 active:ring-inline active:ring-dgreen rounded-lg text-white px-4 py-2">
