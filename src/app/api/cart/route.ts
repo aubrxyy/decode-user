@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { Redis } from '@upstash/redis';
 
 interface CartItem {
     title: string;
@@ -8,12 +9,16 @@ interface CartItem {
     quantity: number;
 }
 
-let cart: CartItem[] = [];
+const redis = new Redis({
+    url: process.env.UPSTASH_REDIS_URL,
+    token: process.env.UPSTASH_REDIS_TOKEN,
+});
 
 export async function POST(req: NextRequest) {
     try {
         const { title, description, price, imageUrl, quantity } = await req.json();
-        const existingItem = cart.find(item => item.title === title);
+        const cart: CartItem[] = (await redis.get('cart')) || [];
+        const existingItem = cart.find((item: CartItem) => item.title === title);
 
         if (existingItem) {
             existingItem.quantity += quantity;
@@ -21,6 +26,7 @@ export async function POST(req: NextRequest) {
             cart.push({ title, description, price, imageUrl, quantity });
         }
 
+        await redis.set('cart', cart);
         return NextResponse.json(cart);
     } catch (error) {
         return NextResponse.error();
@@ -29,6 +35,7 @@ export async function POST(req: NextRequest) {
 
 export async function GET() {
     try {
+        const cart = await redis.get('cart') || [];
         return NextResponse.json(cart);
     } catch (error) {
         return NextResponse.error();
@@ -38,12 +45,14 @@ export async function GET() {
 export async function PUT(req: NextRequest) {
     try {
         const { title, quantity } = await req.json();
-        const item = cart.find(item => item.title === title);
+        const cart: CartItem[] = (await redis.get('cart')) || [];
+        const item = cart.find((item: CartItem) => item.title === title);
 
         if (item) {
             item.quantity = quantity;
         }
 
+        await redis.set('cart', cart);
         return NextResponse.json(cart);
     } catch (error) {
         return NextResponse.error();
