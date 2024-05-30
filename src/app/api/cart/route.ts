@@ -29,6 +29,7 @@ export async function POST(req: NextRequest) {
         await redis.set('cart', cart);
         return NextResponse.json(cart);
     } catch (error) {
+        console.error('POST error:', error);
         return NextResponse.error();
     }
 }
@@ -38,6 +39,7 @@ export async function GET() {
         const cart = await redis.get('cart') || [];
         return NextResponse.json(cart);
     } catch (error) {
+        console.error('GET error:', error);
         return NextResponse.error();
     }
 }
@@ -55,6 +57,7 @@ export async function PUT(req: NextRequest) {
         await redis.set('cart', cart);
         return NextResponse.json(cart);
     } catch (error) {
+        console.error('PUT error:', error);
         return NextResponse.error();
     }
 }
