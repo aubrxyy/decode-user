@@ -11,31 +11,43 @@ interface CartItem {
 let cart: CartItem[] = [];
 
 export async function POST(req: NextRequest) {
-    const { title, description, price, imageUrl, quantity } = await req.json();
-    const existingItem = cart.find(item => item.title === title);
+    try {
+        const { title, description, price, imageUrl, quantity } = await req.json();
+        const existingItem = cart.find(item => item.title === title);
 
-    if (existingItem) {
-        existingItem.quantity += quantity;
-    } else {
-        cart.push({ title, description, price, imageUrl, quantity });
+        if (existingItem) {
+            existingItem.quantity += quantity;
+        } else {
+            cart.push({ title, description, price, imageUrl, quantity });
+        }
+
+        return NextResponse.json(cart);
+    } catch (error) {
+        return NextResponse.error();
     }
-
-    return NextResponse.json(cart);
 }
 
 export async function GET() {
-    return NextResponse.json(cart);
+    try {
+        return NextResponse.json(cart);
+    } catch (error) {
+        return NextResponse.error();
+    }
 }
 
 export async function PUT(req: NextRequest) {
-    const { title, quantity } = await req.json();
-    const item = cart.find(item => item.title === title);
+    try {
+        const { title, quantity } = await req.json();
+        const item = cart.find(item => item.title === title);
 
-    if (item) {
-        item.quantity = quantity;
+        if (item) {
+            item.quantity = quantity;
+        }
+
+        return NextResponse.json(cart);
+    } catch (error) {
+        return NextResponse.error();
     }
-
-    return NextResponse.json(cart);
 }
 
 export function OPTIONS() {
