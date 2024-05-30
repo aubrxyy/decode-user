@@ -10,6 +10,8 @@ interface CartItem {
 
 let cart: CartItem[] = [];
 
+export const maxDuration = 30;
+
 export async function POST(req: NextRequest) {
     const { title, description, price, imageUrl, quantity } = await req.json();
     const existingItem = cart.find(item => item.title === title);
