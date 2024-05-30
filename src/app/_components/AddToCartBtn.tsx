@@ -9,7 +9,7 @@ interface AddToCartBtnProps {
     menu: Menu;
 }
 
-let activePopups = 0;
+let activePopups: string[] = [];
 
 async function addToCart(menu: Menu) {
     const priceValue = parseInt(menu.price.replace(/\./g, ''));
@@ -55,19 +55,28 @@ export default function AddToCartBtn({ menu }: AddToCartBtnProps) {
                 popup.classList.remove('visible');
                 popup.classList.add('hidden');
                 clickCount.current = 0;
-                activePopups -= 1;
+                activePopups = activePopups.filter(id => id !== popupId);
+                updatePopupPositions();
             }, 1250); 
         }
+    };
+
+    const updatePopupPositions = () => {
+        activePopups.forEach((id, index) => {
+            const popup = document.getElementById(id);
+            if (popup) {
+                popup.style.bottom = `${4 + index * 60}px`;
+            }
+        });
     };
 
     useEffect(() => {
         const popup = document.createElement('div');
         popup.id = popupId;
         popup.className = 'hidden fixed left-4 bg-dgreen text-white p-3 rounded shadow-lg';
-        popup.style.bottom = `${4 + activePopups * 60}px`;
         document.body.appendChild(popup);
-        setPopupPosition(activePopups);
-        activePopups += 1;
+        activePopups.push(popupId);
+        updatePopupPositions();
 
         return () => {
             if (popup) {
@@ -76,7 +85,8 @@ export default function AddToCartBtn({ menu }: AddToCartBtnProps) {
             if (timeoutId.current) {
                 clearTimeout(timeoutId.current);
             }
-            activePopups -= 1;
+            activePopups = activePopups.filter(id => id !== popupId);
+            updatePopupPositions();
         };
     }, [popupId]);
 
