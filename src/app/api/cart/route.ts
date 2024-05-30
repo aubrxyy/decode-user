@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+export const runtime = 'edge'
+
 interface CartItem {
     title: string;
     description: string;
@@ -10,7 +12,6 @@ interface CartItem {
 
 let cart: CartItem[] = [];
 
-export const maxDuration = 30;
 
 export async function POST(req: NextRequest) {
     const { title, description, price, imageUrl, quantity } = await req.json();
