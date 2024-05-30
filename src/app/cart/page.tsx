@@ -15,7 +15,7 @@ export default function CartPage() {
     useEffect(() => {
         window.scrollTo(0, 0);
         async function fetchCart() {
-            const res = await fetch('/api/cart');
+            const res = await fetch('/api/cart', { cache: 'force-cache' });
             const data = await res.json();
             const filteredData = data.filter((item: CartItem) => item.quantity > 0); 
             setCart(filteredData);
