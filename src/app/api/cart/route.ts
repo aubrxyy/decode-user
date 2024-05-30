@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
             cart.push({ title, description, price, imageUrl, quantity });
         }
 
-        await redis.set('cart', cart);
+        await redis.pipeline().set('cart', cart).exec();
         return NextResponse.json(cart);
     } catch (error) {
         console.error('POST error:', error);
@@ -54,7 +54,7 @@ export async function PUT(req: NextRequest) {
             item.quantity = quantity;
         }
 
-        await redis.set('cart', cart);
+        await redis.pipeline().set('cart', cart).exec();
         return NextResponse.json(cart);
     } catch (error) {
         console.error('PUT error:', error);
